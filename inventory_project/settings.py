@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'user_account',
-    'composite_devices'
+    'composite_devices',
+    'resources',
+    'reporting',
 ]
 
 MIDDLEWARE = [

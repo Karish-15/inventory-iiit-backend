@@ -38,4 +38,13 @@ class CompositeDevicesRetrieveAPIView(views.APIView):
         serializer = CompositeDevicesSerializer(composite_device)
         return Response(serializer.data, status=200)
 
+class CompositeDevicesSearchAPIView(views.APIView):
+    permission_classes = [IsAuthenticated,]
+    def get(self, request, *args, **kwargs):
+        filters = request.data.get('filters', None)
+        if filters is None:
+            return Response({'error': 'filters is required'}, status=400)
+        composite_device = CompositeDevices.objects.all().filter(**filters)
+        serializer = CompositeDevicesSerializer(composite_device, many=True)
 
+        return Response({"total": len(serializer.data), "data": serializer.data}, status=200)

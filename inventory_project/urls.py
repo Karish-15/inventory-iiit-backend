@@ -28,4 +28,6 @@ urlpatterns = [
 
     path('users/', include('user_account.urls')),
     path('composite_devices/', include('composite_devices.urls')),
+    path('resources/', include('resources.urls')),
+    path('reporting/', include('reporting.urls')),
 ]
