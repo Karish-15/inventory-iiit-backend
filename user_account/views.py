@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User
-from .serializers import UserTokenSerializer, userRegisterSerializer
+from .serializers import UserTokenSerializer, userRegisterSerializer, UserSerializer
 
 class giveUserFromTokenAPIView(views.APIView):
     permission_classes = [permissions.IsAuthenticated,]
@@ -23,11 +23,12 @@ class UserTokenView(TokenObtainPairView):
 
 class getUserList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         if self.request.user.is_admin:
             return User.objects.all()
-        return {'error': 'You are not authorized to view this resource'}
+        return User.objects.filter(username=self.request.user.username)
     
 class isAdminCheck(views.APIView):
     permission_classes = [permissions.IsAuthenticated,]

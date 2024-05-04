@@ -12,7 +12,7 @@ class Reports(models.Model):
     serial_number = models.CharField(max_length=100)
     # product_table: sw, computing, io, nw
     product_table = models.CharField(max_length=100, null = True)
-    stage = models.IntegerField()
+    stage = models.IntegerField(default=1)
     description = models.TextField()
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     product_url = models.CharField(max_length=100, null = True)

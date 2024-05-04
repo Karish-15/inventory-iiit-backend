@@ -15,11 +15,12 @@ class ReportsSearchAPIView(views.APIView):
         if filters is None:
             return Response({'error': 'filters is required'}, status=400)
         
-        fields = ["serial number", "report_id"]
+        fields = ["serial_number", "report_id"]
         Qr = None
         for field in fields:
-            q = Q(**{"%s__contains" % field: filters.get(field, "") })
-            Qr = Qr | q if Qr else q
+            if field in filters:
+                q = Q(**{"%s__contains" % field: filters.get(field, "") })
+                Qr = Qr | q if Qr else q
 
         results = Reports.objects.all().filter(Qr)
         serializer = ReportsSerializer(results, many=True)
@@ -32,31 +33,18 @@ class ReportsSearchAPIView(views.APIView):
             status=200
         )
 
-class ReportsListAPIView(generics.ListCreateAPIView):
+class ReportsListAPIView(generics.ListAPIView):
     serializer_class = ReportsSerializer
     permission_classes = [IsAuthenticated,]
-
-    def get_queryset(self):
-        filters = self.request.data.get('filters', {})
-        queryset = Reports.objects.all().filter(**filters).order_by('-created_at')
-        if filters['stage'] != 1:
-            for report in queryset:
-                try:
-                    under_repair_report = UnderRepair.objects.get(report_id=report['report_id'])
-                    report.update(
-                        {
-                            'expected_return_date': under_repair_report.expected_return_date, 
-                            'repairing_company': under_repair_report.repairing_company,
-                        }
-                    )
-                except UnderRepair.DoesNotExist:
-                    pass
-        return queryset
+    queryset = Reports.objects.all().order_by('-created_at')
 
 class ReportsCreateAPIView(generics.CreateAPIView):
     queryset = Reports.objects.all()
     serializer_class = ReportsSerializer
     permission_classes = [IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 class ReportsUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Reports.objects.all()

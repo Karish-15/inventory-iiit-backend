@@ -15,16 +15,14 @@ TO-DO:
 
 class ResourcesSearchAPIView(views.APIView):
     permission_classes = [IsAuthenticated,]
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         filters = request.data.get('filters', None)
         if filters is None:
             return Response({'error': 'filters is required'}, status=400)
 
-        response = search_resource(filters)
+        response = search_resource(filters, resource_type=filters.get('resource_type', None))
 
-        return Response({
-            response
-        }, status=200)
+        return Response(response, status=200)
 
 class SW_ResourcesListAPIView(generics.ListAPIView):
     # queryset = SW_Resources.objects.all().filter()
@@ -32,7 +30,9 @@ class SW_ResourcesListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
-        return SW_Resources.objects.all().filter(self.request.user)
+        sw_resources = SW_Resources.objects.all().filter(supervisor =  self.request.user)
+        serializer = SW_ResourcesSerializer(sw_resources, many=True)
+        return serializer.data
 
 class SW_ResourcesCreateAPIView(generics.CreateAPIView):
     queryset = SW_Resources.objects.all()
@@ -66,7 +66,9 @@ class Computing_ResourcesListAPIView(generics.ListAPIView):
     serializer_class = Computing_ResourcesSerializer
     permission_classes = [IsAuthenticated,]
     def get_queryset(self):
-        return Computing_Resources.objects.all().filter(self.request.user)
+        computing_resources = Computing_Resources.objects.all().filter(self.request.user)
+        serializer = Computing_ResourcesSerializer(computing_resources, many=True)
+        return serializer.data
 
 class Computing_ResourcesCreateAPIView(generics.CreateAPIView):
     queryset = Computing_Resources.objects.all()
@@ -101,7 +103,9 @@ class IO_ResourcesListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
-        return IO_Resources.objects.all().filter(self.request.user)
+        io_resources = IO_Resources.objects.all().filter(self.request.user)
+        serializer = IO_ResourcesSerializer(io_resources, many=True)
+        return serializer.data
 
 class IO_ResourcesCreateAPIView(generics.CreateAPIView):
     queryset = IO_Resources.objects.all()
@@ -136,7 +140,9 @@ class NW_ResourcesListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
-        return NW_Resources.objects.all().filter(self.request.user)
+        nw_resources = NW_Resources.objects.all().filter(self.request.user)
+        serializer = NW_ResourcesSerializer(nw_resources, many=True)
+        return serializer.data
 
 class NW_ResourcesCreateAPIView(generics.CreateAPIView):
     queryset = NW_Resources.objects.all()

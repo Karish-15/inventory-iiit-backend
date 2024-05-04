@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import CompositeDevices
 from .serializers import CompositeDevicesSerializer
 
-class CompositeDevicesListAPIView(generics.ListCreateAPIView):
+class CompositeDevicesListAPIView(generics.ListAPIView):
     queryset = CompositeDevices.objects.all()
     serializer_class = CompositeDevicesSerializer
     permission_classes = [IsAuthenticated,]

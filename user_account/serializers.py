@@ -25,6 +25,9 @@ class userRegisterSerializer(serializers.ModelSerializer):
             )
         user.first_name = validated_data['first_name']
         user.last_name = validated_data['last_name']
+        user.contact = validated_data.get('contact', "")
+        user.misc_details = validated_data.get('misc_details', "")
+        user.is_admin = validated_data.get('is_admin', False)
         user.save()
 
         return user
