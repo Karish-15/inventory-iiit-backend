@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 
 from composite_devices.models import CompositeDevices
 
@@ -24,6 +25,7 @@ class SW_Resources(models.Model):
     warranty_type = models.CharField(max_length=100, choices=WarrantyChoices.choices)
     attached_device = models.ForeignKey(CompositeDevices, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.type + ' [' + self.product_type + '-' + self.serial_number + ']'
@@ -52,6 +54,7 @@ class Computing_Resources(models.Model):
     warranty_type = models.CharField(max_length=100, choices=WarrantyChoices.choices)
     attached_device = models.ForeignKey(CompositeDevices, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.type + ' [' + self.product_type + '-' + self.serial_number + ']'
@@ -80,6 +83,7 @@ class IO_Resources(models.Model):
     warranty_type = models.CharField(max_length=100, choices=WarrantyChoices.choices)
     attached_device = models.ForeignKey(CompositeDevices, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.type + ' [' + self.product_type + '-' + self.serial_number + ']'
@@ -108,6 +112,7 @@ class NW_Resources(models.Model):
     warranty_type = models.CharField(max_length=100, choices=WarrantyChoices.choices)
     attached_device = models.ForeignKey(CompositeDevices, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.type + ' [' + self.product_type + '-' + self.serial_number + ']'

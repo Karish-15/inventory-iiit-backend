@@ -20,3 +20,19 @@ class registerUserAPIView(generics.CreateAPIView):
 
 class UserTokenView(TokenObtainPairView):
     serializer_class = UserTokenSerializer
+
+class getUserList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get_queryset(self):
+        if self.request.user.is_admin:
+            return User.objects.all()
+        return {'error': 'You are not authorized to view this resource'}
+    
+class isAdminCheck(views.APIView):
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get(self, request):
+        if request.user.is_admin:
+            return Response({'status': True, 'message': 'You are an admin'})
+        return Response({'status': False, 'message': 'You are not an admin'})
