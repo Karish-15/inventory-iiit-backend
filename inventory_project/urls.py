@@ -18,13 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
-    TokenVerifyView
+    TokenVerifyView,
+    TokenObtainPairView
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify', TokenVerifyView.as_view(), name='token_verify'),
+    path('token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 
     path('users/', include('user_account.urls')),
     path('composite_devices/', include('composite_devices.urls')),
