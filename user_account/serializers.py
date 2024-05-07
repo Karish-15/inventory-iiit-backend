@@ -16,7 +16,7 @@ class userRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password', 'contact', 'misc_details', 'is_admin']
+        fields = ['first_name', 'last_name', 'username', 'password', 'contact', 'misc_details', 'is_admin', 'is_staff']
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -28,6 +28,7 @@ class userRegisterSerializer(serializers.ModelSerializer):
         user.contact = validated_data.get('contact', "")
         user.misc_details = validated_data.get('misc_details', "")
         user.is_admin = validated_data.get('is_admin', False)
+        user.is_staff = validated_data.get('is_staff', False)
         user.save()
 
         return user
@@ -35,4 +36,4 @@ class userRegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'contact', 'misc_details', 'is_admin']
+        fields = ['id', 'first_name', 'last_name', 'username', 'contact', 'misc_details', 'is_admin', 'is_staff']
