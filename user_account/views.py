@@ -12,7 +12,8 @@ class giveUserFromTokenAPIView(views.APIView):
         return Response({'status': True, 'message': 'Send POST request to get user details'})
     def post(self, request):
         print(request.user)
-        serializer = UserSerializer(request.user)
+        user = User.objects.get(username=request.user)
+        serializer = UserSerializer(user)
         return Response(serializer.data)
 
 class registerUserAPIView(generics.CreateAPIView):
