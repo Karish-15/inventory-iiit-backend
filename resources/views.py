@@ -66,7 +66,7 @@ class Computing_ResourcesListAPIView(generics.ListAPIView):
     serializer_class = Computing_ResourcesSerializer
     permission_classes = [IsAuthenticated,]
     def get_queryset(self):
-        computing_resources = Computing_Resources.objects.all().filter(self.request.user)
+        computing_resources = Computing_Resources.objects.all().filter(supervisor = self.request.user)
         serializer = Computing_ResourcesSerializer(computing_resources, many=True)
         return serializer.data
 
@@ -103,7 +103,7 @@ class IO_ResourcesListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
-        io_resources = IO_Resources.objects.all().filter(self.request.user)
+        io_resources = IO_Resources.objects.all().filter(supervisor = self.request.user)
         serializer = IO_ResourcesSerializer(io_resources, many=True)
         return serializer.data
 
@@ -140,7 +140,7 @@ class NW_ResourcesListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
-        nw_resources = NW_Resources.objects.all().filter(self.request.user)
+        nw_resources = NW_Resources.objects.all().filter(supervisor = self.request.user)
         serializer = NW_ResourcesSerializer(nw_resources, many=True)
         return serializer.data
 
