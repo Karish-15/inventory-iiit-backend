@@ -12,7 +12,9 @@ class giveUserFromTokenAPIView(views.APIView):
         return Response({'status': True, 'message': 'Send POST request to get user details'})
     def post(self, request):
         print(request.user)
-        return Response(request.user.username)
+        user = User.objects.get(username=request.user)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 class registerUserAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -26,7 +28,7 @@ class getUserList(generics.ListAPIView):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        if self.request.user.is_admin:
+        if self.request.user.is_admin or self.request.user.is_staff:
             return User.objects.all()
         return User.objects.filter(username=self.request.user.username)
     

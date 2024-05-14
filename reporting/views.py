@@ -86,15 +86,15 @@ class updateReportingStage(views.APIView):
             report = Reports.objects.get(report_id=report_id)
             report.stage = stage
             
-            if stage == 4:
+            if stage == '4':
                 under_repair_report = UnderRepair.objects.get(report_id=report_id)
                 under_repair_report.under_repair = False
                 # set current date
                 under_repair_report.expected_return_date = datetime.now()
                 under_repair_report.save()
-            elif stage == 2:
+            elif stage == '3':
                 under_repair_report = UnderRepair(
-                    report_id=report_id,
+                    report_id=Reports.objects.get(report_id=report_id),
                     expected_return_date=datetime.strptime(request.data.get('expected_return_date', None), "%d-%m-%Y"),
                     repairing_company=request.data.get('repairing_company', None),
                     under_repair = True,

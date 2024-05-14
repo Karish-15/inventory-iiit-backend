@@ -12,7 +12,7 @@ def search_resource(filters, resource_type: str = None):
     for field in fields:
         if field in filters:
             q = Q(**{"%s__contains" % field: filters.get(field, "") })
-            Qr = Qr | q if Qr else q
+            Qr = Qr & q if Qr else q
 
     SW_results = SW_Resources.objects.all().filter(Qr)
     Computing_results = Computing_Resources.objects.all().filter(Qr)
