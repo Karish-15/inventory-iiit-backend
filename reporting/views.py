@@ -15,7 +15,7 @@ class ReportsSearchAPIView(views.APIView):
         if filters is None:
             return Response({'error': 'filters is required'}, status=400)
         
-        fields = ["serial_number", "report_id"]
+        fields = ["serial_number", "report_id", "stage"]
         Qr = None
         for field in fields:
             if field in filters:
