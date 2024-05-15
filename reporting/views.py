@@ -44,7 +44,7 @@ class ReportsCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated,]
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by_id=self.request.user.id)
 
 class ReportsUpdateDestroyAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Reports.objects.all()

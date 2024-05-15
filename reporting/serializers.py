@@ -9,7 +9,6 @@ class ReportsSerializer(serializers.ModelSerializer):
     expected_return_date = serializers.SerializerMethodField()
     reparing_company = serializers.SerializerMethodField()
 
-    
     class Meta:
         model = Reports
         fields = '__all__'
@@ -21,6 +20,7 @@ class ReportsSerializer(serializers.ModelSerializer):
         response = search_resource(filters)
         for key, value in response.items():
             if key in ['sw_data', 'computing_data', 'io_data', 'nw_data'] and len(value)>0:
+                value[0]['supervisor'] = obj.created_by
                 resource_model = SEARCH_MODEL_MAPPING[key](**value[0])
                 return resource_model.get_absolute_url()
 
